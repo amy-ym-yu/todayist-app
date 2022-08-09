@@ -1,25 +1,18 @@
 import logo from './logo.svg';
+
+import React from 'react';
 import './App.css';
+import { Button, Card, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  // declaring 2 variables, setting the states for text and completion
+  const [todos, setTodos] = React.useState([
+    {
+      text: "This is a sample todo",
+      isDone: false
+    }
+  ])
 }
 
 export default App;
