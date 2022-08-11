@@ -1,17 +1,30 @@
 import logo from './logo.svg';
 
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+  // delete list, rearrange list order
+  const [lists, setLists] = useState(["main"]);
+
+  const addList = () => {
+    setLists([...lists, "new list"]);
+  }
+
+  const renameList = (index, text) => {
+    lists[index] = text;
+    setLists([...lists]);
+  }
 
     return (
-      <div>
-        <TodoList listName="main"/>
-        <TodoList listName="one" week={2} />
-        <TodoList listName="two"/>
+      <div class="px-3">
+        <h1 class="text-center">t o d a y i s t</h1>
+        <div class="d-flex justify-content-end">
+        <Button variant="outline-success" onClick={() => addList()}>+</Button>
+        </div>
+        {lists.map((x, index) => <TodoList listName={x} onListNameChange={renameList} index={index}/>)}
       </div>
     )
 
@@ -21,13 +34,16 @@ function TodoList(props) {
   // todos - js list that will hold all of the tasks
   // setTodos is a function which
   // useState contains current state and setter
-  console.log("props are: ", props);
-  const [todos, setTodos] = React.useState([
+  // console.log("props are: ", props);
+  const [todos, setTodos] = useState([
     {
       text: "This is a sample todo",
       isDone: false
     }
   ]);
+
+  const [toggle, setToggle] = useState(true);
+  const [name, setName] = useState(props.listName);
 
   const addTodo = (text) => {
     const newTodos = [...todos, { text }]; // appending text to list of tasks
@@ -49,22 +65,45 @@ function TodoList(props) {
   return (
     <div className='app'>
       <div className='container'>
-        <h1 className='text-center mb-4'>{props.listName}</h1>
+        {toggle ? (
+          <h3 className='text-center mb-4' onDoubleClick={() => {
+            setToggle(false);
+            }}
+            >{props.listName}</h3>
+        ) : (
+          <input
+            type="text"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key==='Escape') {
+                setToggle(true);
+                event.preventDefault();
+                event.stopPropagation();
+                props.onListNameChange(props.index, name);
+              }
+            }}
+          />
+        )}
+
         <FormTodo addTodo={addTodo} />
         <div>
-          {todos.map((todo, index) => (
-            <Card>
-              <Card.Body>
-                <Todo
-                key={index}
-                index={index}
-                todo={todo}
-                markTodo={markTodo}
-                removeTodo={removeTodo}
-                />
-              </Card.Body>
-            </Card>
-          ))}
+          {todos.map((todo, index) => {
+            return <Card>
+                      <Card.Body>
+                        <Todo
+                        key={index}
+                        index={index}
+                        todo={todo}
+                        markTodo={markTodo}
+                        removeTodo={removeTodo}
+                        />
+                      </Card.Body>
+                    </Card>
+          }
+          )}
         </div>
       </div>
     </div>
