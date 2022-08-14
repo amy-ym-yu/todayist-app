@@ -5,6 +5,27 @@ import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { initializeApp } from "firebase/app";
+// Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBsFwpXXAIEJchk8uL3aJ0wEMq5Eg7B9lE",
+  authDomain: "todayist-c3b28.firebaseapp.com",
+  projectId: "todayist-c3b28",
+  storageBucket: "todayist-c3b28.appspot.com",
+  messagingSenderId: "941265907808",
+  appId: "1:941265907808:web:ff8241e13a7a59a6965305",
+  measurementId: "G-4WS3QW1ZHT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
 function App() {
   // delete list, rearrange list order
   const [lists, setLists] = useState(["main"]);
