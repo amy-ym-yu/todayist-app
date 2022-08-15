@@ -13,7 +13,7 @@ const firebaseConfig = {
   };
   
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig); // eslint-disable-next-line
+  const app = initializeApp(firebaseConfig);
   const db = getFirestore(app); 
 
   export { db }
