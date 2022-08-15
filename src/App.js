@@ -25,6 +25,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig); // eslint-disable-next-line
 const db = getFirestore(app); 
 
+/* Data Structure: document
+doc name: mainList
+* 1
+  - text: default text
+  - status: not done
+* 2
+  - text: default text
+  - status: not done
+*/
 
 function App() {
   // delete list, rearrange list order
