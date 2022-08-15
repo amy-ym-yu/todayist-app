@@ -38,11 +38,11 @@ export function TodoList(props) {
       setTodos(newTodos); // sets new state for todo variable
     };
 
-    // creating a new document for the list
-    db.collection("lists").setDoc({
-        name: props.listName,
-        tasks: todos
-    });
+    // // creating a new document for the list
+    // db.collection("lists").doc.setDoc({
+    //     name: props.listName,
+    //     tasks: todos
+    // });
   
     return (
       <div className='app'>
