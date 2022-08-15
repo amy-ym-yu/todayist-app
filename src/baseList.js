@@ -4,6 +4,7 @@ import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { collection, doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore"; 
+import { db } from './firebase';
 
 export function TodoList(props) {
     // todos - js list that will hold all of the tasks
@@ -36,6 +37,12 @@ export function TodoList(props) {
       newTodos.splice(index, 1); // returns a new array for newTodos without task at index
       setTodos(newTodos); // sets new state for todo variable
     };
+
+    // // creating a new document for the list
+    // db.collection("lists").doc.setDoc({
+    //     name: props.listName,
+    //     tasks: todos
+    // });
   
     return (
       <div className='app'>
