@@ -3,6 +3,8 @@ import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { collection, doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore"; 
+
 export function TodoList(props) {
     // todos - js list that will hold all of the tasks
     // setTodos is a function which
