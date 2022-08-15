@@ -1,8 +1,13 @@
+import React, {useState} from 'react';
+import './App.css';
+import { Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { TodoList } from "./baseList";
 
 import { initializeApp } from "firebase/app";
 
-import { getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore"; // eslint-disable-next-line
 import { collection, doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore"; 
 
 // Your web app's Firebase configuration
@@ -17,8 +22,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app = initializeApp(firebaseConfig); // eslint-disable-next-line
+const db = getFirestore(app); 
 
 
 function App() {
