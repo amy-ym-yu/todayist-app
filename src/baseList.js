@@ -38,6 +38,7 @@ export function TodoList(props) {
     return (
       <div className='app'>
         <div className='container'>
+            {/* name of list + toggle name */}
           {toggle ? (
             <h3 className='text-center mb-4' onDoubleClick={() => {
               setToggle(false);
@@ -60,8 +61,10 @@ export function TodoList(props) {
               }}
             />
           )}
-  
-          <FormTodo addTodo={addTodo} />
+              {/* input section for task */}
+          <FormTodo addTodo={addTodo} /> 
+
+              {/* displays all tasks */}
           <div>
             {todos.map((todo, index) => {
               return <Card>
@@ -82,6 +85,7 @@ export function TodoList(props) {
       </div>
     );
   
+    // display task + add/delete buttons
     function Todo({todo, index, markTodo, removeTodo}) {
       return (
         <div className="todo">
@@ -95,6 +99,7 @@ export function TodoList(props) {
       );
     }
   
+    // input for task description
     function FormTodo({ addTodo }) {
       const [value, setValue] = React.useState("");
   

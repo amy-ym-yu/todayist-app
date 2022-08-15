@@ -27,10 +27,12 @@ const db = getFirestore(app);
 
 /* Data Structure: document
 doc name: mainList
-* 1
+* index ??
+* array of tasks:
+  0:
   - text: default text
   - status: not done
-* 2
+  1:
   - text: default text
   - status: not done
 */
