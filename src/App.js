@@ -3,8 +3,7 @@ import { TodoList } from "./baseList";
 import { initializeApp } from "firebase/app";
 
 import { getFirestore } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore"; 
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore"; 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
