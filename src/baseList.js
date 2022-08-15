@@ -38,6 +38,7 @@ export function TodoList(props) {
       setTodos(newTodos); // sets new state for todo variable
     };
 
+    // TO DO: FIX
     // // creating a new document for the list
     // db.collection("lists").doc.setDoc({
     //     name: props.listName,
