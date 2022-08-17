@@ -1,19 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-import { collection, doc, setDoc, getDocs, addDoc, updateDoc } from "firebase/firestore"; 
-import { db } from './firebase';
+// eslint-disable-next-line
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { user } from './App';
 
 // use wait effect for getting data
 // use onclick for adding data
 
 export function TodoList(props) {
     // todos - js list that will hold all of the tasks
-    // setTodos is a function which
     // useState contains current state and setter
-    // console.log("props are: ", props);
     const [todos, setTodos] = useState([
       {
         text: "This is a sample todo",
@@ -23,45 +21,48 @@ export function TodoList(props) {
   
     const [toggle, setToggle] = useState(true);
     const [name, setName] = useState(props.listName);
+
+    // changes previous entry, doesn't add new
+    // TASK: idea: add id's but HOW for a field ??
+    updateDoc(user, {
+        list: {
+            listName: props.listName,
+            index: props.index,
+            tasks: todos
+        }
+      });
   
     const addTodo = (text) => {
-      const newTodos = [...todos, { text }]; // appending text to list of tasks
+      const newTodos = [...todos, { text, isDone: false }]; // appending text to list of tasks
       setTodos(newTodos); // setting new state for todo variable
+      updateDoc(user, { // updates database
+        list: {
+            tasks: newTodos
+        }
+      });
     };
   
     const markTodo = (index) => {
       const newTodos = [...todos]; // copies entire list of tasks
       newTodos[index].isDone = true; // marks task at index as true
       setTodos(newTodos); // sets new state for todo variable
+      updateDoc(user, { // updates database
+        list: {
+            tasks: newTodos
+        }
+      });
     };
   
     const removeTodo = (index) => {
       const newTodos = [...todos]; // copies entire list of task
       newTodos.splice(index, 1); // returns a new array for newTodos without task at index
       setTodos(newTodos); // sets new state for todo variable
+      updateDoc(user, { // updates database
+        list: {
+            tasks: newTodos
+        }
+      });
     };
-
-    // creating a new document for the list
-    useEffect( async() => {
-
-        try {
-            const docRef = await addDoc(collection(db, "lists"), {
-                name: props.listName,
-                tasks: todos
-            });
-          
-            console.log("Document written with ID: ", docRef.id);
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
-
-        const querySnapshot = await getDocs(collection(db, "lists"));
-        querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-});
-
-    }, [])
-
   
     return (
       <div className='app'>

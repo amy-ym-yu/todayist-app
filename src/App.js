@@ -5,20 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { TodoList } from "./baseList";
 import { db } from "./firebase";
+import { collection, doc, setDoc, getDoc, updateDoc } from "firebase/firestore"; 
 
-import { collection, doc, setDoc, getDoc, addDoc, updateDoc } from "firebase/firestore"; 
-
-/* Data Structure: document
-doc name: mainList
-* index ??
-* array of tasks:
-  0:
-  - text: default text
-  - status: not done
-  1:
-  - text: default text
-  - status: not done
-*/
+const user = doc(db, "users", "amyyu");
 
 function App() {
   // delete list, rearrange list order
@@ -47,3 +36,4 @@ function App() {
 
 
 export default App;
+export { user };
