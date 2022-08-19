@@ -24,13 +24,13 @@ export function TodoList(props) {
 
     // changes previous entry, doesn't add new
     // TASK: idea: add id's but HOW for a field ??
-    updateDoc(user, {
-        list: {
-            listName: props.listName,
-            index: props.index,
-            tasks: todos
-        }
-      });
+    // updateDoc(user, {
+    //     list: {
+    //         listName: props.listName,
+    //         index: props.index,
+    //         tasks: todos
+    //     }
+    //   });
   
     const addTodo = (text) => {
       const newTodos = [...todos, { text, isDone: false }]; // appending text to list of tasks
