@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // eslint-disable-next-line
 import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
-import { user } from './App';
+// import { user } from './App';
 
 // use wait effect for getting data
 // use onclick for adding data
@@ -21,47 +21,22 @@ export function TodoList(props) {
   
     const [toggle, setToggle] = useState(true);
     const [name, setName] = useState(props.listName);
-
-    // changes previous entry, doesn't add new
-    // TASK: idea: add id's but HOW for a field ??
-    // updateDoc(user, {
-    //     list: {
-    //         listName: props.listName,
-    //         index: props.index,
-    //         tasks: todos
-    //     }
-    //   });
   
     const addTodo = (text) => {
-      const newTodos = [...todos, { text, isDone: false }]; // appending text to list of tasks
+      const newTodos = [...todos, { text: text, isDone: false }]; // appending text to list of tasks
       setTodos(newTodos); // setting new state for todo variable
-      updateDoc(user, { // updates database
-        list: {
-            tasks: newTodos
-        }
-      });
     };
   
     const markTodo = (index) => {
       const newTodos = [...todos]; // copies entire list of tasks
       newTodos[index].isDone = true; // marks task at index as true
       setTodos(newTodos); // sets new state for todo variable
-      updateDoc(user, { // updates database
-        list: {
-            tasks: newTodos
-        }
-      });
     };
   
     const removeTodo = (index) => {
       const newTodos = [...todos]; // copies entire list of task
       newTodos.splice(index, 1); // returns a new array for newTodos without task at index
       setTodos(newTodos); // sets new state for todo variable
-      updateDoc(user, { // updates database
-        list: {
-            tasks: newTodos
-        }
-      });
     };
   
     return (
@@ -100,10 +75,12 @@ export function TodoList(props) {
                         <Card.Body>
                           <Todo
                           key={index}
-                          index={index}
+                          taskIndex={index}
                           todo={todo}
                           markTodo={markTodo}
                           removeTodo={removeTodo}
+                          onActionChecked={props.onActionChecked}
+                          listIndex={props.index}
                           />
                         </Card.Body>
                       </Card>
@@ -115,14 +92,17 @@ export function TodoList(props) {
     );
   
     // display task + add/delete buttons
-    function Todo({todo, index, markTodo, removeTodo}) {
+    function Todo({todo, taskIndex, markTodo, removeTodo, onActionChecked, listIndex}) {
       return (
         <div className="todo">
           <span style={{ textDecoration: todo.isDone ? "line-through" : ""}}>{todo.text}</span>
   
           <div>
-            <Button variant="outline-success" onClick={() => markTodo(index)}>✓</Button>{' '}
-            <Button variant="outline-danger" onClick={() => removeTodo(index)}>✕</Button>
+            <Button variant="outline-success" onClick={() => {
+                markTodo(taskIndex);
+                onActionChecked(listIndex, taskIndex, todo.text);
+            }}>✓</Button>{' '}
+            <Button variant="outline-danger" onClick={() => removeTodo(taskIndex)}>✕</Button>
           </div>
         </div>
       );

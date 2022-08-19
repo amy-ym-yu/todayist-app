@@ -1,17 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { TodoList } from "./baseList";
 import { db } from "./firebase";
-import { collection, doc, setDoc, getDoc, updateDoc } from "firebase/firestore"; 
+import { doc, setDoc, updateDoc } from "firebase/firestore"; 
 
 const user = doc(db, "users", "amyyu");
 
-function App() {
-  // delete list, rearrange list order
-  const [lists, setLists] = useState(["main"]);
+// const [listsHolder, setListsHolder] = useState([]); // temporary list holder
+
+function App() { // TO DO: delete list, rearrange list order
+  setDoc(user, {lists: []}); // sets up empty array for data field
+
+  const [lists, setLists] = useState(["main"]); // establishes default list
+
+  const onActionChecked = (listindex, taskindex, title) => {
+    alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
+  }
 
   const addList = () => {
     setLists([...lists, "new list"]);
@@ -28,7 +35,7 @@ function App() {
         <div class="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>+</Button>
         </div>
-        {lists.map((x, index) => <TodoList listName={x} onListNameChange={renameList} index={index}/>)}
+        {lists.map((x, index) => <TodoList listName={x} onListNameChange={renameList} onActionChecked={onActionChecked} index={index}/>)}
       </div>
     )
 
@@ -36,4 +43,4 @@ function App() {
 
 
 export default App;
-export { user };
+// export { user, listsHolder };
