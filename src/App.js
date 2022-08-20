@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import './App.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,12 +9,11 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 const user = doc(db, "users", "amyyu");
 
-// const [listsHolder, setListsHolder] = useState([]); // temporary list holder
-
 function App() { // TO DO: delete list, rearrange list order
   setDoc(user, {lists: []}); // sets up empty array for data field
 
   const [lists, setLists] = useState(["main"]); // establishes default list
+  updateDoc(user, {lists: lists});
 
   // onLoad, onTaskAdded, onTaskDeleted, onListRenamed
 
@@ -23,12 +22,15 @@ function App() { // TO DO: delete list, rearrange list order
   }
 
   const addList = () => {
-    setLists([...lists, "new list"]);
+    setLists([...lists, "new list"]); 
+    updateDoc(user, {lists: lists});
   }
 
   const renameList = (index, text) => {
+    console.log(lists);
     lists[index] = text;
-    setLists([...lists]);
+    setLists([...lists]); 
+    setDoc(user, {lists: lists}); // updates db with new list names
   }
 
     return (

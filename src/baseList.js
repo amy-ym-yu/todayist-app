@@ -60,7 +60,7 @@ export function TodoList(props) {
                   setToggle(true);
                   event.preventDefault();
                   event.stopPropagation();
-                  props.onListNameChange(props.index, name);
+                  props.onListNameChange(props.listIndex, name);
                 }
               }}
             />
@@ -80,7 +80,7 @@ export function TodoList(props) {
                           markTodo={markTodo}
                           removeTodo={removeTodo}
                           onActionChecked={props.onActionChecked}
-                          listIndex={props.index}
+                          listIndex={props.listIndex}
                           />
                         </Card.Body>
                       </Card>
