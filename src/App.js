@@ -16,6 +16,8 @@ function App() { // TO DO: delete list, rearrange list order
 
   const [lists, setLists] = useState(["main"]); // establishes default list
 
+  // onLoad, onTaskAdded, onTaskDeleted, onListRenamed
+
   const onActionChecked = (listindex, taskindex, title) => {
     alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
   }
@@ -35,7 +37,9 @@ function App() { // TO DO: delete list, rearrange list order
         <div class="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>+</Button>
         </div>
-        {lists.map((x, index) => <TodoList listName={x} onListNameChange={renameList} onActionChecked={onActionChecked} index={index}/>)}
+        {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
+          onListNameChange={renameList} onActionChecked={onActionChecked}
+        />)}
       </div>
     )
 
