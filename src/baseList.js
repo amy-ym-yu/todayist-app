@@ -2,12 +2,7 @@ import React, { useState} from 'react';
 import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// eslint-disable-next-line
 import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
-// import { user } from './App';
-
-// use wait effect for getting data
-// use onclick for adding data
 
 export function TodoList(props) {
     // todos - js list that will hold all of the tasks
