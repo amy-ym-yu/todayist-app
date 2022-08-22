@@ -7,14 +7,20 @@ import { TodoList } from "./baseList";
 import { db } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore"; 
 
-const user = doc(db, "users", "amyyu");
+/* USERS COLLECTION
+- if there were multiple users, there would be one document per user including:
+  * username, password, accessible lists...
+*/
+const user = doc(db, "users", "amyyu"); // simplyifying to one user with possibility to expand
 
-function App() { // if time permits: delete list, rearrange list order
+/* REMINDERS:
+- if time permits: rearrange list order
+- 
+*/
+
+
+function App() { 
   const [lists, setLists] = useState(["main"]); // establishes default list
-  updateDoc(user, {listIDs: lists}); // inputs list names into lists 
-
-  // add button
-  // const deleteList = () => {}
   updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
   const addList = () => {
@@ -22,10 +28,10 @@ function App() { // if time permits: delete list, rearrange list order
     updateDoc(user, {listIDs: lists}); // adds new list name to dv
   }
 
-  // add button
+  // add button / setting for delete list
   // const deleteList = () => {}
 
-  // update anything in lists
+  // UPDATE LIST INFO 
   const renameList = (index, text) => {
     lists[index] = text;
     setLists([...lists]); 
@@ -43,7 +49,7 @@ function App() { // if time permits: delete list, rearrange list order
       <div class="px-3">
         <h1 class="text-center">t o d a y i s t</h1>
         <div class="d-flex justify-content-end">
-        <Button variant="outline-success" onClick={() => addList()}>+</Button>
+        <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>
         <div class="d-flex flex-wrap flex-row justify-content-center">
           {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
