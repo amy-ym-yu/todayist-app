@@ -8,22 +8,23 @@ import { db } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore"; 
 
 const user = doc(db, "users", "amyyu");
+setDoc(user, {listIDs: []}); // sets up empty array for data field
+updateDoc(user, {arrayLists: []})
 
 function App() { // TO DO: delete list, rearrange list order
-  setDoc(user, {lists: []}); // sets up empty array for data field
 
   const [lists, setLists] = useState(["main"]); // establishes default list
-  updateDoc(user, {lists: lists}); // inputs list names into lists 
+  updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
   const addList = () => {
     setLists([...lists, "new list"]); 
-    updateDoc(user, {lists: lists}); // adds new list name to dv
+    updateDoc(user, {listIDs: lists}); // adds new list name to dv
   }
 
-  // add button
-  const deleteList = () => {
+  // // add button
+  // const deleteList = () => {
 
-  }
+  // }
 
   // update anything in lists
   const renameList = (index, text) => {
@@ -31,13 +32,13 @@ function App() { // TO DO: delete list, rearrange list order
     setLists([...lists]); 
     setDoc(user, {lists: lists}); // updates db with new list name
   }
-    const onTaskAdded = (listIndex, taskList) => {
-      // 
-    }
+    // const onTaskAdded = (listIndex, taskList) => {
+    //   // 
+    // }
   
-    const onTaskDeleted = () => {
-      // 
-    }
+    // const onTaskDeleted = () => {
+    //   // 
+    // }
   
     const onActionChecked = (listindex, taskindex, title) => {
       alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
@@ -50,7 +51,7 @@ function App() { // TO DO: delete list, rearrange list order
         <Button variant="outline-success" onClick={() => addList()}>+</Button>
         </div>
         {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
-          onListNameChange={renameList} onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
+          onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
           onActionChecked={onActionChecked} 
         />)}
       </div>
