@@ -40,7 +40,8 @@ export function TodoList(props) {
     };
   
     return (
-      <div className='app'>
+      <div className='app rounded border border-primary flex-grow-1 m-2' style={{maxWidth: '60%',
+      minWidth:'20%'}}>
         <div className='container'>
             {/* name of list + toggle name */}
           {toggle ? (
@@ -70,22 +71,25 @@ export function TodoList(props) {
 
               {/* displays all tasks */}
           <div>
+        <div class="pb-3">
             {todos.map((todo, index) => {
-              return <Card>
-                        <Card.Body>
-                          <Todo
-                          key={index}
-                          taskIndex={index}
-                          todo={todo}
-                          markTodo={markTodo}
-                          removeTodo={removeTodo}
-                          onActionChecked={props.onActionChecked}
-                          listIndex={props.listIndex}
-                          />
-                        </Card.Body>
-                      </Card>
-            }
-            )}
+                        return <Card>
+                                    <Card.Body>
+                                    <Todo
+                                    key={index}
+                                    taskIndex={index}
+                                    todo={todo}
+                                    markTodo={markTodo}
+                                    removeTodo={removeTodo}
+                                    onActionChecked={props.onActionChecked}
+                                    listIndex={props.listIndex}
+                                    />
+                                    </Card.Body>
+                                </Card>
+                        }
+                        )}
+        </div>
+            
           </div>
         </div>
       </div>

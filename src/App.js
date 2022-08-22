@@ -45,10 +45,12 @@ function App() { // TO DO: delete list, rearrange list order
         <div class="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>+</Button>
         </div>
-        {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
+        <div class="d-flex flex-wrap flex-row justify-content-center">
+          {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
           onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
           onActionChecked={onActionChecked} 
         />)}
+        </div>
       </div>
     )
 }
