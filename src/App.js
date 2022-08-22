@@ -8,17 +8,22 @@ import { db } from "./firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore"; 
 
 const user = doc(db, "users", "amyyu");
-setDoc(user, {listIDs: []}); // sets up empty array for data field
-updateDoc(user, {arrayLists: []})
 
 function App() { // TO DO: delete list, rearrange list order
 
   const [lists, setLists] = useState(["main"]); // establishes default list
-  updateDoc(user, {listIDs: lists}); // inputs list names into lists 
+  updateDoc(user, {lists: lists}); // inputs list names into lists 
+
+  // // add button
+  // const deleteList = () => {
+
+  // }
+=======
+  updateDoc(user, {lists: lists}); // inputs list names into lists 
 
   const addList = () => {
     setLists([...lists, "new list"]); 
-    updateDoc(user, {listIDs: lists}); // adds new list name to dv
+    updateDoc(user, {lists: lists}); // adds new list name to dv
   }
 
   // // add button
