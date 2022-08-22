@@ -9,7 +9,7 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 const user = doc(db, "users", "amyyu");
 
-function App() { // TO DO: delete list, rearrange list order
+function App() { // if time permits: delete list, rearrange list order
   const [lists, setLists] = useState(["main"]); // establishes default list
   updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
