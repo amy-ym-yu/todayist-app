@@ -13,11 +13,11 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 */
 const user = doc(db, "users", "amyyu"); // simplyifying to one user with possibility to expand
 
-/* REMINDERS:
-- if time permits: rearrange list order
-- 
+/* ALL LISTS COLLECTION
+- WHY? Allows for possibility to expand list features (collaborative lists)
+- HOW: one document per list with information including:
+  * users allowed to access, name of list, index (for default user), tasks... 
 */
-
 
 function App() { 
   const [lists, setLists] = useState(["main"]); // establishes default list
@@ -61,6 +61,8 @@ function App() {
     )
 }
 
-
 export default App;
-// export { user, listsHolder };
+
+/* REMINDERS:
+- if time permits: rearrange list order
+*/
