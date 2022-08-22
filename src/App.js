@@ -20,6 +20,18 @@ const user = doc(db, "users", "amyyu"); // simplyifying to one user with possibi
 */
 
 function App() { 
+  /* thoughts:
+  load the app:
+    - if map of lists is blank, create new doc in allLists with users and name field filled out
+    - if adding doc, same as above
+    - if deleting doc, LOOK UP DELETING
+    
+    - if renaming list: rename field
+    - if updating list: 
+      * have a temp hold array, splice task array
+      * update item, append new task to array
+      * update entire tasks field
+   */
   const [lists, setLists] = useState(["main"]); // establishes default list
   updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
