@@ -14,11 +14,8 @@ function App() { // TO DO: delete list, rearrange list order
   const [lists, setLists] = useState(["main"]); // establishes default list
   updateDoc(user, {lists: lists}); // inputs list names into lists 
 
-  // // add button
-  // const deleteList = () => {
-
-  // }
-=======
+  // add button
+  // const deleteList = () => {}
   updateDoc(user, {lists: lists}); // inputs list names into lists 
 
   const addList = () => {
@@ -26,10 +23,8 @@ function App() { // TO DO: delete list, rearrange list order
     updateDoc(user, {lists: lists}); // adds new list name to dv
   }
 
-  // // add button
-  // const deleteList = () => {
-
-  // }
+  // add button
+  // const deleteList = () => {}
 
   // update anything in lists
   const renameList = (index, text) => {
@@ -37,13 +32,9 @@ function App() { // TO DO: delete list, rearrange list order
     setLists([...lists]); 
     setDoc(user, {lists: lists}); // updates db with new list name
   }
-    // const onTaskAdded = (listIndex, taskList) => {
-    //   // 
-    // }
+    // const onTaskAdded = (listIndex, taskList) => {}
   
-    // const onTaskDeleted = () => {
-    //   // 
-    // }
+    // const onTaskDeleted = () => {}
   
     const onActionChecked = (listindex, taskindex, title) => {
       alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
