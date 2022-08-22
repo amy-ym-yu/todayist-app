@@ -13,25 +13,35 @@ function App() { // TO DO: delete list, rearrange list order
   setDoc(user, {lists: []}); // sets up empty array for data field
 
   const [lists, setLists] = useState(["main"]); // establishes default list
-  updateDoc(user, {lists: lists});
-
-  // onLoad, onTaskAdded, onTaskDeleted, onListRenamed
-
-  const onActionChecked = (listindex, taskindex, title) => {
-    alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
-  }
+  updateDoc(user, {lists: lists}); // inputs list names into lists 
 
   const addList = () => {
     setLists([...lists, "new list"]); 
-    updateDoc(user, {lists: lists});
+    updateDoc(user, {lists: lists}); // adds new list name to dv
   }
 
+  // add button
+  const deleteList = () => {
+
+  }
+
+  // update anything in lists
   const renameList = (index, text) => {
-    console.log(lists);
     lists[index] = text;
     setLists([...lists]); 
-    setDoc(user, {lists: lists}); // updates db with new list names
+    setDoc(user, {lists: lists}); // updates db with new list name
   }
+    const onTaskAdded = (listIndex, taskList) => {
+      // 
+    }
+  
+    const onTaskDeleted = () => {
+      // 
+    }
+  
+    const onActionChecked = (listindex, taskindex, title) => {
+      alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
+    }
 
     return (
       <div class="px-3">
@@ -40,11 +50,11 @@ function App() { // TO DO: delete list, rearrange list order
         <Button variant="outline-success" onClick={() => addList()}>+</Button>
         </div>
         {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
-          onListNameChange={renameList} onActionChecked={onActionChecked}
+          onListNameChange={renameList} onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
+          onActionChecked={onActionChecked} 
         />)}
       </div>
     )
-
 }
 
 
