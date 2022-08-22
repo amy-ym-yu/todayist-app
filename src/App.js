@@ -10,17 +10,16 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 const user = doc(db, "users", "amyyu");
 
 function App() { // TO DO: delete list, rearrange list order
-
   const [lists, setLists] = useState(["main"]); // establishes default list
-  updateDoc(user, {lists: lists}); // inputs list names into lists 
+  updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
   // add button
   // const deleteList = () => {}
-  updateDoc(user, {lists: lists}); // inputs list names into lists 
+  updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
   const addList = () => {
     setLists([...lists, "new list"]); 
-    updateDoc(user, {lists: lists}); // adds new list name to dv
+    updateDoc(user, {listIDs: lists}); // adds new list name to dv
   }
 
   // add button
@@ -30,7 +29,7 @@ function App() { // TO DO: delete list, rearrange list order
   const renameList = (index, text) => {
     lists[index] = text;
     setLists([...lists]); 
-    setDoc(user, {lists: lists}); // updates db with new list name
+    setDoc(user, {listIDs: lists}); // updates db with new list name
   }
     // const onTaskAdded = (listIndex, taskList) => {}
   
