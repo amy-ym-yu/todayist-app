@@ -20,24 +20,23 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
    * }
    */
 
-const user = doc(db, "users", "amyyu"); 
-var [tempData, setTempData] = useState({});
+function App() { 
+  const user = doc(db, "users", "amyyu"); 
+  var [tempData, setTempData] = useState({});
 
-class UserData {
-  // lists: 
-  save = async () => {
+  save = async (userID, data) => {
     // Takes all the properties on UserData and calls update/addDoc in firebase
-    await updateDoc(user, tempData, {merge: true});
+    await updateDoc(userID, data, {merge: true});
+    // set data in db, load data in db 
   }
 
   load = (userID) => {
     // Given user ID, pull down all the UserData and initialize this object
-    const docSnap = getDoc(user);
+    const docSnap = getDoc(userID);
+    console.log(docSnap.data());
+    return docSnap.data();
   }
 
-}
-
-function App() { 
   /* thoughts:
   load the app:
     - if updating: 
@@ -47,9 +46,7 @@ function App() {
   const [lists, setLists] = useState([]); // establishes default list
 
   const addList = () => {
-    setLists([...lists, "new list"]);
-    // adds new list name
-    updateDoc(user, tempData); 
+  
   }
 
   // add button / setting for delete list
