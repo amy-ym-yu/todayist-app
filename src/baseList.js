@@ -16,34 +16,43 @@ export function TodoList(props) {
 
     const load = async (userID) => {
         // Given user ID, pull down all the UserData and initialize this object
-        const docSnap = await getDoc(userID); console.log("load:", docSnap.data());
-        props.setTempData(docSnap.data()); console.log("temp:", docSnap.data());
+        const docSnap = await getDoc(userID); //console.log("load:", docSnap.data());
+        props.setTempData(docSnap.data()); //console.log("temp:", docSnap.data());
         return docSnap.data();
     }
+    const [todos, setTodos] = useState([]);
+    //console.log(todos);
 
     useEffect(() => {
         load(user);
+        setTodos(props.tempData.lists[props.listIndex].tasks);
     }, []);
     
-    const [todos, setTodos] = useState(props.tempData.lists[props.listIndex].tasks);
-    //console.log(todos);
+    
   
     const [toggle, setToggle] = useState(true);
     const [name, setName] = useState(props.listName);
   
     const addTodo = (text) => {
       const newTodos = [...todos, { text: text, isDone: false }]; // appending text to list of tasks
-      console.log("updated:",newTodos);
+      //console.log("updated:",newTodos);
       props.tempData.lists[props.listIndex].tasks = newTodos;
-      console.log(props.tempData.lists[props.listIndex].tasks);
+      //console.log(props.tempData.lists[props.listIndex].tasks);
       save(user, props.tempData);
       load(user);
+      setTodos(props.tempData.lists[props.listIndex].tasks)
     };
   
-    const markTodo = (taskIndex) => {
-      const newTodos = [...todos]; // copies entire list of tasks
-      newTodos[taskIndex].isDone = true; // marks task at index as true
-      setTodos(newTodos); // sets new state for todo variable
+    const markTodo = (listIndex, taskIndex) => {
+        //console.log("todos:",todos);
+        const newTodos = [...todos]; // copies entire list of tasks
+        //console.log(newTodos);
+        newTodos[taskIndex].isDone = true; // marks task at index as true
+        props.tempData.lists[props.listIndex].tasks = newTodos;
+        //console.log(newTodos, props.tempData.lists[props.listIndex].tasks);
+        save(user, props.tempData);
+        load(user);
+        setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
     const removeTodo = (index) => {
@@ -116,8 +125,7 @@ export function TodoList(props) {
   
           <div>
             <Button variant="outline-success" onClick={() => {
-                markTodo(taskIndex);
-                onActionChecked(listIndex, taskIndex, todo.text);
+                markTodo(listIndex, taskIndex, todo.text);
             }}>✓</Button>{' '}
             <Button variant="outline-danger" onClick={() => removeTodo(taskIndex)}>✕</Button>
           </div>
