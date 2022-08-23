@@ -35,6 +35,7 @@ function App() {
   }
 
   const user = doc(db, "users", "amyyu"); 
+
   var [tempData, setTempData] = useState(
     {
     username: "amyyu",
@@ -44,25 +45,18 @@ function App() {
       }]
     });
   save(user, tempData);
-
-  /* thoughts:
-  load the app:
-    - if updating: 
-      * have a temp hold, edit temp obj
-      * update doc
-   */
-
+  
   useEffect(() => {
     load(user);
   }, [])
-  
 
   const addList = async () => {
     // load data into temp, change temp, save data, put data into lists
     const data = await load(user);
-    const newObj = { listName: "new list", tasks: [] }; console.log("newObj:", newObj);
+    const newObj = { listName: "new list", tasks: [] }; //console.log("newObj:", newObj);
     data.lists = [...data.lists, newObj];
-    setTempData(data); console.log(tempData);
+    setTempData(data);
+    save(user, tempData);
   }
 
   // add button / setting for delete list
@@ -70,10 +64,9 @@ function App() {
 
   // UPDATE LIST INFO ---------------------------------------------------------
   const renameList = (index, text) => {
-    tempData.lists[index] = text;
-     
-    // update db with new list name
-    updateDoc(user, tempData); 
+    tempData.lists[index].listName = text;
+    save(user, tempData);
+    setTempData(load(user));
   }
     // const onTaskAdded = (listIndex, taskList) => {}
   
