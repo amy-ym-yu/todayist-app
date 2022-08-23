@@ -17,7 +17,6 @@ const user = doc(db, "users", "amyyu");
 
 class UserData {
   /* DOCUMENT
-   * 
    * {
    *  userID: 'myUserID',
    *  lists: [ { name: 'list1', todos: []
@@ -51,36 +50,8 @@ function App() {
       * update item, append new task to array
       * update entire tasks field
    */
-  var [userData, setUserData] = useState([]);
+  var [userData, setUserData] = useState({});
   const [lists, setLists] = useState([]); // establishes default list
-
-  const loadUserData = async () => {
-    const docSnap = await getDoc(user)
-    setUserData(docSnap.data());
-    console.log(docSnap.data()); // has not updated userData yet
-  }
-
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
-
-  const checkIfMainExists = async () => {
-    if (userData.listIDs && userData.listIDs.length) {
-      setLists(userData.listIDs)
-    } else {
-      const mainDoc = await addDoc(listDB, {
-        name: "main",
-        tasks: []
-      });
-      setLists(userData.listIDs);
-      console.log("Document written with ID: ", mainDoc.id);
-    }
-  }
-
-  useEffect(() => {
-    checkIfMainExists();
-  }, []);
 
   const addList = () => {
     setLists([...lists, "new list"]); 
