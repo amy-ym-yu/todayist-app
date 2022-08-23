@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // eslint-disable-next-line
 import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 
 export function TodoList(props) {

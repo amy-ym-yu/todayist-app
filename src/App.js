@@ -1,23 +1,24 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import './App.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { TodoList } from "./baseList";
-import { db } from "./firebase";
-import { doc, setDoc, updateDoc } from "firebase/firestore"; 
+import { db } from "./firebase"; 
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 
 /* USERS COLLECTION
 - if there were multiple users, there would be one document per user including:
   * username, password, accessible lists...
 */
-const user = doc(db, "users", "amyyu"); // simplyifying to one user with possibility to expand
 
 /* ALL LISTS COLLECTION
 - WHY? Allows for possibility to expand list features (collaborative lists)
 - HOW: one document per list with information including:
   * users allowed to access, name of list, index (for default user), tasks... 
 */
+
+const user = doc(db, "users", "amyyu"); // simplyifying to one user with possibility to expand
 
 function App() { 
   /* thoughts:
@@ -32,7 +33,20 @@ function App() {
       * update item, append new task to array
       * update entire tasks field
    */
-  const [lists, setLists] = useState(["main"]); // establishes default list
+  var [userData, setUserData] = useState([]);
+
+
+  const loadUserData = async () => {
+    const docSnap = await getDoc(user)
+    setUserData(docSnap.data());
+    console.log(docSnap.data()); // has not updated userData yet
+  }
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+  
+  const [lists, setLists] = useState([]); // establishes default list
   updateDoc(user, {listIDs: lists}); // inputs list names into lists 
 
   const addList = () => {
@@ -58,12 +72,12 @@ function App() {
     }
 
     return (
-      <div class="px-3">
-        <h1 class="text-center">t o d a y i s t</h1>
-        <div class="d-flex justify-content-end">
+      <div className="px-3" >
+        <h1 className="text-center">t o d a y i s t</h1>
+        <div className="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>
-        <div class="d-flex flex-wrap flex-row justify-content-center">
+        <div className="d-flex flex-wrap flex-row justify-content-center">
           {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
           onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
           onActionChecked={onActionChecked} 
