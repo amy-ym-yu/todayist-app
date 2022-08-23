@@ -1,11 +1,11 @@
-import React, {useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import './App.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { TodoList } from "./baseList";
 import { db } from "./firebase"; 
-import { doc, getDoc, setDoc, addDoc, updateDoc } from "firebase/firestore"; 
+import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 
 /* USERS COLLECTION
 - if there were multiple users, there would be one document per user including:
@@ -13,26 +13,26 @@ import { doc, getDoc, setDoc, addDoc, updateDoc } from "firebase/firestore";
     * name of list, tasks... 
 */
 
-const user = doc(db, "users", "amyyu"); 
-
-class UserData {
-  /* DOCUMENT
+ /* DOCUMENT
    * {
    *  userID: 'myUserID',
    *  lists: [ { name: 'list1', todos: []
    * }
    */
 
+const user = doc(db, "users", "amyyu"); 
+var [tempData, setTempData] = useState({});
+
+class UserData {
   // lists: 
   save = async () => {
-
-    // Takes all the properties on UserData and calls update/addDoc
-    // in firebase
-
+    // Takes all the properties on UserData and calls update/addDoc in firebase
+    await updateDoc(user, tempData, {merge: true});
   }
 
   load = (userID) => {
     // Given user ID, pull down all the UserData and initialize this object
+    const docSnap = getDoc(user);
   }
 
 }
@@ -40,32 +40,27 @@ class UserData {
 function App() { 
   /* thoughts:
   load the app:
-    - if map of lists is blank, create new doc in allLists with users and name field filled out
-    - if adding doc, same as above
-    - if deleting doc, LOOK UP DELETING
-    
-    - if renaming list: rename field
-    - if updating list: 
-      * have a temp hold array, splice task array
-      * update item, append new task to array
-      * update entire tasks field
+    - if updating: 
+      * have a temp hold, edit temp obj
+      * update doc
    */
-  var [userData, setUserData] = useState({});
   const [lists, setLists] = useState([]); // establishes default list
 
   const addList = () => {
-    setLists([...lists, "new list"]); 
-    updateDoc(user, {listIDs: lists}); // adds new list name to dv
+    setLists([...lists, "new list"]);
+    // adds new list name
+    updateDoc(user, tempData); 
   }
 
   // add button / setting for delete list
   // const deleteList = () => {}
 
-  // UPDATE LIST INFO 
+  // UPDATE LIST INFO ---------------------------------------------------------
   const renameList = (index, text) => {
     lists[index] = text;
     setLists([...lists]); 
-    setDoc(user, {listIDs: lists}); // updates db with new list name
+    // update db with new list name
+    updateDoc(user, tempData); 
   }
     // const onTaskAdded = (listIndex, taskList) => {}
   
@@ -73,6 +68,8 @@ function App() {
   
     const onActionChecked = (listindex, taskindex, title) => {
       alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
+      // write data into temp
+      updateDoc(user, tempData); // updates db with new list name
     }
 
     return (
