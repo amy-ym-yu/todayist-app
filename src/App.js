@@ -5,20 +5,38 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { TodoList } from "./baseList";
 import { db } from "./firebase"; 
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
+import { doc, getDoc, setDoc, addDoc, updateDoc } from "firebase/firestore"; 
 
 /* USERS COLLECTION
 - if there were multiple users, there would be one document per user including:
   * username, password, accessible lists...
+    * name of list, tasks... 
 */
 
-/* ALL LISTS COLLECTION
-- WHY? Allows for possibility to expand list features (collaborative lists)
-- HOW: one document per list with information including:
-  * users allowed to access, name of list, index (for default user), tasks... 
-*/
+const user = doc(db, "users", "amyyu"); 
 
-const user = doc(db, "users", "amyyu"); // simplyifying to one user with possibility to expand
+class UserData {
+  /* DOCUMENT
+   * 
+   * {
+   *  userID: 'myUserID',
+   *  lists: [ { name: 'list1', todos: []
+   * }
+   */
+
+  // lists: 
+  save = async () => {
+
+    // Takes all the properties on UserData and calls update/addDoc
+    // in firebase
+
+  }
+
+  load = (userID) => {
+    // Given user ID, pull down all the UserData and initialize this object
+  }
+
+}
 
 function App() { 
   /* thoughts:
@@ -34,7 +52,7 @@ function App() {
       * update entire tasks field
    */
   var [userData, setUserData] = useState([]);
-
+  const [lists, setLists] = useState([]); // establishes default list
 
   const loadUserData = async () => {
     const docSnap = await getDoc(user)
@@ -45,9 +63,24 @@ function App() {
   useEffect(() => {
     loadUserData();
   }, []);
-  
-  const [lists, setLists] = useState([]); // establishes default list
-  updateDoc(user, {listIDs: lists}); // inputs list names into lists 
+
+
+  const checkIfMainExists = async () => {
+    if (userData.listIDs && userData.listIDs.length) {
+      setLists(userData.listIDs)
+    } else {
+      const mainDoc = await addDoc(listDB, {
+        name: "main",
+        tasks: []
+      });
+      setLists(userData.listIDs);
+      console.log("Document written with ID: ", mainDoc.id);
+    }
+  }
+
+  useEffect(() => {
+    checkIfMainExists();
+  }, []);
 
   const addList = () => {
     setLists([...lists, "new list"]); 
@@ -78,7 +111,7 @@ function App() {
         <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>
         <div className="d-flex flex-wrap flex-row justify-content-center">
-          {lists.map((x, index) => <TodoList listName={x} listIndex={index} 
+          {(lists || []).map((x, index) => <TodoList listName={x} listIndex={index} 
           onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
           onActionChecked={onActionChecked} 
         />)}
