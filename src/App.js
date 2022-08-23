@@ -29,8 +29,8 @@ function App() {
 
   const load = async (userID) => {
     // Given user ID, pull down all the UserData and initialize this object
-    const docSnap = await getDoc(userID); console.log("load:", docSnap.data());
-    setTempData(docSnap.data()); console.log("temp:", docSnap.data());
+    const docSnap = await getDoc(userID); //console.log("load:", docSnap.data());
+    setTempData(docSnap.data()); //console.log("temp:", docSnap.data());
     return docSnap.data();
   }
 
@@ -41,7 +41,10 @@ function App() {
     username: "amyyu",
     lists: [{
       listName: "main",
-      tasks: []
+      tasks: [{
+        text: "This is a sample todo",
+        isDone: false
+      }]
       }]
     });
   save(user, tempData);
@@ -53,7 +56,12 @@ function App() {
   const addList = async () => {
     // load data into temp, change temp, save data, put data into lists
     const data = await load(user);
-    const newObj = { listName: "new list", tasks: [] }; //console.log("newObj:", newObj);
+    const newObj = {
+      listName: "new list", 
+      tasks: [{
+      text: "This is a sample todo",
+      isDone: false
+    }] }; //console.log("newObj:", newObj);
     data.lists = [...data.lists, newObj];
     setTempData(data);
     save(user, tempData);
@@ -88,6 +96,7 @@ function App() {
           {(tempData.lists || []).map((x, index) => <TodoList listName={x.listName} listIndex={index} 
           onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
           onActionChecked={onActionChecked} 
+          tempData={tempData} setTempData={setTempData}
         />)}
         </div>
       </div>

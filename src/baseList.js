@@ -1,30 +1,48 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // eslint-disable-next-line
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { db } from "./firebase"; 
+import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 
 export function TodoList(props) {
-    // todos - js list that will hold all of the tasks
-    // useState contains current state and setter
-    const [todos, setTodos] = useState([
-      {
-        text: "This is a sample todo",
-        isDone: false
-      }
-    ]);
+    const user = doc(db, "users", "amyyu"); 
+
+    const save = async (userID, data) => {
+        // Takes all the properties on UserData and calls update/addDoc in firebase
+        await updateDoc(userID, data);
+        // set data in db, load data in db 
+    }
+
+    const load = async (userID) => {
+        // Given user ID, pull down all the UserData and initialize this object
+        const docSnap = await getDoc(userID); console.log("load:", docSnap.data());
+        props.setTempData(docSnap.data()); console.log("temp:", docSnap.data());
+        return docSnap.data();
+    }
+
+    useEffect(() => {
+        load(user);
+    }, []);
+    
+    const [todos, setTodos] = useState(props.tempData.lists[props.listIndex].tasks);
+    //console.log(todos);
   
     const [toggle, setToggle] = useState(true);
     const [name, setName] = useState(props.listName);
   
     const addTodo = (text) => {
       const newTodos = [...todos, { text: text, isDone: false }]; // appending text to list of tasks
-      setTodos(newTodos); // setting new state for todo variable
+      console.log("updated:",newTodos);
+      props.tempData.lists[props.listIndex].tasks = newTodos;
+      console.log(props.tempData.lists[props.listIndex].tasks);
+      save(user, props.tempData);
+      load(user);
     };
   
-    const markTodo = (index) => {
+    const markTodo = (taskIndex) => {
       const newTodos = [...todos]; // copies entire list of tasks
-      newTodos[index].isDone = true; // marks task at index as true
+      newTodos[taskIndex].isDone = true; // marks task at index as true
       setTodos(newTodos); // sets new state for todo variable
     };
   
@@ -67,7 +85,7 @@ export function TodoList(props) {
               {/* displays all tasks */}
           <div>
         <div class="pb-3">
-            {todos.map((todo, index) => {
+            {props.tempData.lists[props.listIndex].tasks.map((todo, index) => {
                         return <Card>
                                     <Card.Body>
                                     <Todo
