@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import './App.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,21 +21,29 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
    */
 
 function App() { 
-  const user = doc(db, "users", "amyyu"); 
-  var [tempData, setTempData] = useState({});
-
-  save = async (userID, data) => {
+  const save = async (userID, data) => {
     // Takes all the properties on UserData and calls update/addDoc in firebase
-    await updateDoc(userID, data, {merge: true});
+    await updateDoc(userID, data);
     // set data in db, load data in db 
   }
 
-  load = (userID) => {
+  const load = async (userID) => {
     // Given user ID, pull down all the UserData and initialize this object
-    const docSnap = getDoc(userID);
-    console.log(docSnap.data());
+    const docSnap = await getDoc(userID); console.log("load:", docSnap.data());
+    setTempData(docSnap.data()); console.log("temp:", docSnap.data());
     return docSnap.data();
   }
+
+  const user = doc(db, "users", "amyyu"); 
+  var [tempData, setTempData] = useState(
+    {
+    username: "amyyu",
+    lists: [{
+      listName: "main",
+      tasks: []
+      }]
+    });
+  save(user, tempData);
 
   /* thoughts:
   load the app:
@@ -43,10 +51,18 @@ function App() {
       * have a temp hold, edit temp obj
       * update doc
    */
-  const [lists, setLists] = useState([]); // establishes default list
 
-  const addList = () => {
+  useEffect(() => {
+    load(user);
+  }, [])
   
+
+  const addList = async () => {
+    // load data into temp, change temp, save data, put data into lists
+    const data = await load(user);
+    const newObj = { listName: "new list", tasks: [] }; console.log("newObj:", newObj);
+    data.lists = [...data.lists, newObj];
+    setTempData(data); console.log(tempData);
   }
 
   // add button / setting for delete list
@@ -54,8 +70,8 @@ function App() {
 
   // UPDATE LIST INFO ---------------------------------------------------------
   const renameList = (index, text) => {
-    lists[index] = text;
-    setLists([...lists]); 
+    tempData.lists[index] = text;
+     
     // update db with new list name
     updateDoc(user, tempData); 
   }
@@ -76,7 +92,7 @@ function App() {
         <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>
         <div className="d-flex flex-wrap flex-row justify-content-center">
-          {(lists || []).map((x, index) => <TodoList listName={x} listIndex={index} 
+          {(tempData.lists || []).map((x, index) => <TodoList listName={x.listName} listIndex={index} 
           onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
           onActionChecked={onActionChecked} 
         />)}
