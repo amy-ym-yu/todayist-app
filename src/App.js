@@ -7,13 +7,6 @@ import { TodoList } from "./baseList";
 import { db } from "./firebase"; 
 import { doc, getDoc, setDoc } from "firebase/firestore"; 
 
- /* DOCUMENT
-   * {
-   *  userID: 'myUserID',
-   *  lists: [ { name: 'list1', todos: []
-   * }
-   */
-
 function App() { 
   const save = async (userID, data) => {
     // Takes all the properties on UserData and calls update/addDoc in firebase
@@ -25,7 +18,11 @@ function App() {
 
   const load = async (userID) => {
     // Given user ID, pull down all the UserData and initialize this object
-    const docSnap = await getDoc(userID); //console.log("load:", docSnap.data());
+    if (!user) {
+      return;
+    }
+    const docSnap = await getDoc(userID); //console.log("load:", docSnap.data())
+
     if (docSnap.data() === undefined) {
       return defaultData;
     }
@@ -33,7 +30,7 @@ function App() {
     return docSnap.data();
   }
 
-  const [user, setUser] = useState(doc(db, "users", "amyyu"));
+  const [user, setUser] = useState();
   const defaultData = {
     username: user,
     lists: [{
@@ -82,9 +79,12 @@ function App() {
     return (
       <div className="px-3" >
         <h1 className="text-center">t o d a y i s t</h1>
+        { !user && <>
+          <span>You're not logged in.</span>
+        </>}
         <div>
           <span>Logged in as: </span>
-          <input type="text" defaultValue={user.id} onKeyDown={ (e) => {
+          <input type="text" onKeyDown={ (e) => {
             if (e.key === "Enter") {
               const newDoc = doc(db, "users", e.target.value);
               setUser(newDoc);
@@ -92,6 +92,7 @@ function App() {
           }}></input>
         </div>
         
+        {user && <>
         <div className="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>
@@ -102,12 +103,10 @@ function App() {
           key={index} user={user}
         />)}
         </div>
+        </>}
+
       </div>
     )
 }
 
 export default App;
-
-/* REMINDERS:
-- if time permits: rearrange list order
-*/
