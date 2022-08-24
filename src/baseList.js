@@ -55,10 +55,13 @@ export function TodoList(props) {
         setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
-    const removeTodo = (index) => {
+    const removeTodo = (listIndex, taskIndex) => {
       const newTodos = [...todos]; // copies entire list of task
-      newTodos.splice(index, 1); // returns a new array for newTodos without task at index
-      setTodos(newTodos); // sets new state for todo variable
+      newTodos.splice(taskIndex, 1); // returns a new array for newTodos without task at index
+      props.tempData.lists[props.listIndex].tasks = newTodos;
+      save(user, props.tempData);
+      load(user);
+      setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
     return (
@@ -88,6 +91,7 @@ export function TodoList(props) {
               }}
             />
           )}
+          <Button variant="outline-danger" onClick={() => props.onDeleteList()}>delete</Button>
               {/* input section for task */}
           <FormTodo addTodo={addTodo} /> 
 
@@ -126,8 +130,8 @@ export function TodoList(props) {
           <div>
             <Button variant="outline-success" onClick={() => {
                 markTodo(listIndex, taskIndex, todo.text);
-            }}>✓</Button>{' '}
-            <Button variant="outline-danger" onClick={() => removeTodo(taskIndex)}>✕</Button>
+            }}>check off</Button>{' '}
+            <Button variant="outline-danger" onClick={() => removeTodo(listIndex, taskIndex)}>delete</Button>
           </div>
         </div>
       );

@@ -67,24 +67,19 @@ function App() {
     save(user, tempData);
   }
 
-  // add button / setting for delete list
-  // const deleteList = () => {}
-
-  // UPDATE LIST INFO ---------------------------------------------------------
+  const deleteList = (listIndex) => {
+    const data = [...tempData.lists];
+    data.splice(listIndex, 1); // returns a new array for data without list at index
+    tempData.lists = data;
+    setTempData(data);
+    save(user, tempData); // 
+  }
+  
   const renameList = (index, text) => {
     tempData.lists[index].listName = text;
     save(user, tempData);
     setTempData(load(user));
   }
-    // const onTaskAdded = (listIndex, taskList) => {}
-  
-    // const onTaskDeleted = () => {}
-  
-    const onActionChecked = (listindex, taskindex, title) => {
-      alert(`You checked an action item! ${title} it was at listindex=${listindex} taskIndex=${taskindex}`)
-      // write data into temp
-      updateDoc(user, tempData); // updates db with new list name
-    }
 
     return (
       <div className="px-3" >
@@ -94,8 +89,7 @@ function App() {
         </div>
         <div className="d-flex flex-wrap flex-row justify-content-center">
           {(tempData.lists || []).map((x, index) => <TodoList listName={x.listName} listIndex={index} 
-          onListNameChange={renameList} //onTaskAdded={onTaskAdded} onTaskDeleted={onTaskDeleted} 
-          onActionChecked={onActionChecked} 
+          onListNameChange={renameList} onDeleteList={deleteList} 
           tempData={tempData} setTempData={setTempData}
         />)}
         </div>
