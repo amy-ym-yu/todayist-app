@@ -23,7 +23,9 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 function App() { 
   const save = async (userID, data) => {
     // Takes all the properties on UserData and calls update/addDoc in firebase
+    console.log("CALLED WITH", data);
     await updateDoc(userID, data);
+    return await load(userID);
     // set data in db, load data in db 
   }
 
@@ -47,7 +49,6 @@ function App() {
       }]
       }]
     });
-  save(user, tempData);
   
   useEffect(() => {
     load(user);
@@ -55,7 +56,7 @@ function App() {
 
   const addList = async () => {
     // load data into temp, change temp, save data, put data into lists
-    const data = await load(user);
+    const data = tempData;
     const newObj = {
       listName: "new list", 
       tasks: [{
@@ -78,7 +79,6 @@ function App() {
   const renameList = (index, text) => {
     tempData.lists[index].listName = text;
     save(user, tempData);
-    setTempData(load(user));
   }
 
     return (
@@ -91,6 +91,7 @@ function App() {
           {(tempData.lists || []).map((x, index) => <TodoList listName={x.listName} listIndex={index} 
           onListNameChange={renameList} onDeleteList={deleteList} 
           tempData={tempData} setTempData={setTempData}
+          key={index}
         />)}
         </div>
       </div>

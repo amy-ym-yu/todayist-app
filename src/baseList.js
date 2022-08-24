@@ -28,8 +28,6 @@ export function TodoList(props) {
         setTodos(props.tempData.lists[props.listIndex].tasks);
     }, []);
     
-    
-  
     const [toggle, setToggle] = useState(true);
     const [name, setName] = useState(props.listName);
   
@@ -39,20 +37,18 @@ export function TodoList(props) {
       props.tempData.lists[props.listIndex].tasks = newTodos;
       //console.log(props.tempData.lists[props.listIndex].tasks);
       save(user, props.tempData);
-      load(user);
       setTodos(props.tempData.lists[props.listIndex].tasks)
     };
   
     const markTodo = (listIndex, taskIndex) => {
-        //console.log("todos:",todos);
-        const newTodos = [...todos]; // copies entire list of tasks
-        //console.log(newTodos);
-        newTodos[taskIndex].isDone = true; // marks task at index as true
-        props.tempData.lists[props.listIndex].tasks = newTodos;
-        //console.log(newTodos, props.tempData.lists[props.listIndex].tasks);
-        save(user, props.tempData);
-        load(user);
-        setTodos(props.tempData.lists[props.listIndex].tasks);
+      //console.log("todos:",todos);
+      const newTodos = [...todos]; // copies entire list of tasks
+      //console.log(newTodos);
+      newTodos[taskIndex].isDone = true; // marks task at index as true
+      props.tempData.lists[props.listIndex].tasks = newTodos;
+      //console.log(newTodos, props.tempData.lists[props.listIndex].tasks);
+      save(user, props.tempData);
+      setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
     const removeTodo = (listIndex, taskIndex) => {
@@ -60,7 +56,6 @@ export function TodoList(props) {
       newTodos.splice(taskIndex, 1); // returns a new array for newTodos without task at index
       props.tempData.lists[props.listIndex].tasks = newTodos;
       save(user, props.tempData);
-      load(user);
       setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
@@ -97,12 +92,11 @@ export function TodoList(props) {
 
               {/* displays all tasks */}
           <div>
-        <div class="pb-3">
+        <div className="pb-3">
             {props.tempData.lists[props.listIndex].tasks.map((todo, index) => {
-                        return <Card>
+                        return <Card key={index}>
                                     <Card.Body>
                                     <Todo
-                                    key={index}
                                     taskIndex={index}
                                     todo={todo}
                                     markTodo={markTodo}
