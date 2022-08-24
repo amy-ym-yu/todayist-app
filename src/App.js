@@ -83,7 +83,7 @@ function App() {
       <div className="px-3" >
         <h1 className="text-center">t o d a y i s t</h1>
         <div>
-          <span>logged in as: </span>
+          <span>Logged in as: </span>
           <input type="text" defaultValue={user.id} onKeyDown={ (e) => {
             if (e.key === "Enter") {
               const newDoc = doc(db, "users", e.target.value);
