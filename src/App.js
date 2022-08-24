@@ -5,13 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { TodoList } from "./baseList";
 import { db } from "./firebase"; 
-import { doc, getDoc, updateDoc } from "firebase/firestore"; 
-
-/* USERS COLLECTION
-- if there were multiple users, there would be one document per user including:
-  * username, password, accessible lists...
-    * name of list, tasks... 
-*/
+import { doc, getDoc, setDoc } from "firebase/firestore"; 
 
  /* DOCUMENT
    * {
@@ -24,7 +18,7 @@ function App() {
   const save = async (userID, data) => {
     // Takes all the properties on UserData and calls update/addDoc in firebase
     console.log("CALLED WITH", data);
-    await updateDoc(userID, data);
+    await setDoc(userID, data);
     return await load(userID);
     // set data in db, load data in db 
   }
@@ -32,15 +26,16 @@ function App() {
   const load = async (userID) => {
     // Given user ID, pull down all the UserData and initialize this object
     const docSnap = await getDoc(userID); //console.log("load:", docSnap.data());
-    setTempData(docSnap.data()); //console.log("temp:", docSnap.data());
+    if (docSnap.data() === undefined) {
+      return defaultData;
+    }
+    setTempData(docSnap.data()); console.log("temp:", docSnap.data());
     return docSnap.data();
   }
 
-  const user = doc(db, "users", "amyyu"); 
-
-  var [tempData, setTempData] = useState(
-    {
-    username: "amyyu",
+  const [user, setUser] = useState(doc(db, "users", "amyyu"));
+  const defaultData = {
+    username: user,
     lists: [{
       listName: "main",
       tasks: [{
@@ -48,11 +43,14 @@ function App() {
         isDone: false
       }]
       }]
-    });
+    };
+
+  var [tempData, setTempData] = useState(defaultData);
   
   useEffect(() => {
+    setTempData(defaultData);
     load(user);
-  }, [])
+  }, [user])
 
   const addList = async () => {
     // load data into temp, change temp, save data, put data into lists
@@ -84,6 +82,16 @@ function App() {
     return (
       <div className="px-3" >
         <h1 className="text-center">t o d a y i s t</h1>
+        <div>
+          <span>logged in as: </span>
+          <input type="text" defaultValue={user.id} onKeyDown={ (e) => {
+            if (e.key === "Enter") {
+              const newDoc = doc(db, "users", e.target.value);
+              setUser(newDoc);
+            }
+          }}></input>
+        </div>
+        
         <div className="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>
@@ -91,7 +99,7 @@ function App() {
           {(tempData.lists || []).map((x, index) => <TodoList listName={x.listName} listIndex={index} 
           onListNameChange={renameList} onDeleteList={deleteList} 
           tempData={tempData} setTempData={setTempData}
-          key={index}
+          key={index} user={user}
         />)}
         </div>
       </div>

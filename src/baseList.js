@@ -3,14 +3,13 @@ import './App.css';
 import { Button, Card, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // eslint-disable-next-line
 import { db } from "./firebase"; 
-import { doc, getDoc, updateDoc } from "firebase/firestore"; 
+import { getDoc, setDoc } from "firebase/firestore"; 
 
 export function TodoList(props) {
-    const user = doc(db, "users", "amyyu"); 
 
     const save = async (userID, data) => {
         // Takes all the properties on UserData and calls update/addDoc in firebase
-        await updateDoc(userID, data);
+        await setDoc(userID, data);
         // set data in db, load data in db 
     }
 
@@ -24,7 +23,7 @@ export function TodoList(props) {
     //console.log(todos);
 
     useEffect(() => {
-        load(user);
+        load(props.user);
         setTodos(props.tempData.lists[props.listIndex].tasks);
     }, []);
     
@@ -36,7 +35,7 @@ export function TodoList(props) {
       //console.log("updated:",newTodos);
       props.tempData.lists[props.listIndex].tasks = newTodos;
       //console.log(props.tempData.lists[props.listIndex].tasks);
-      save(user, props.tempData);
+      save(props.user, props.tempData);
       setTodos(props.tempData.lists[props.listIndex].tasks)
     };
   
@@ -47,7 +46,7 @@ export function TodoList(props) {
       newTodos[taskIndex].isDone = true; // marks task at index as true
       props.tempData.lists[props.listIndex].tasks = newTodos;
       //console.log(newTodos, props.tempData.lists[props.listIndex].tasks);
-      save(user, props.tempData);
+      save(props.user, props.tempData);
       setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
@@ -55,7 +54,7 @@ export function TodoList(props) {
       const newTodos = [...todos]; // copies entire list of task
       newTodos.splice(taskIndex, 1); // returns a new array for newTodos without task at index
       props.tempData.lists[props.listIndex].tasks = newTodos;
-      save(user, props.tempData);
+      save(props.user, props.tempData);
       setTodos(props.tempData.lists[props.listIndex].tasks);
     };
   
