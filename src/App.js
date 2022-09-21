@@ -21,16 +21,21 @@ function App() {
     if (!user) {
       return;
     }
-    const docSnap = await getDoc(userID); //console.log("load:", docSnap.data())
+
+    const docSnap = await getDoc(userID); console.log("load:", docSnap.data())
 
     if (docSnap.data() === undefined) {
+      save(userID, defaultData);
+      setTempData(defaultData);
       return defaultData;
     }
+
     setTempData(docSnap.data()); console.log("temp:", docSnap.data());
     return docSnap.data();
   }
 
   const [user, setUser] = useState();
+
   const defaultData = {
     username: user,
     lists: [{
@@ -41,7 +46,7 @@ function App() {
       }]
       }]
     };
-
+    
   var [tempData, setTempData] = useState(defaultData);
   
   useEffect(() => {
@@ -78,21 +83,23 @@ function App() {
 
     return (
       <div className="px-3" >
-        <h1 className="text-center">t o d a y i s t</h1>
-        { !user && <>
+        <h1 className="text-center p-3">t o d a y i s t</h1>
+        { (!user) && <>
           <span>You're not logged in.</span>
         </>}
         <div>
-          <span>Logged in as: </span>
+          <span>Your name: </span>
           <input type="text" onKeyDown={ (e) => {
             if (e.key === "Enter") {
               const newDoc = doc(db, "users", e.target.value);
+              //const newDoc = doc(db, "users", 'amyyu');
+              //console.log("tempdata", tempData.lists)
               setUser(newDoc);
             }
           }}></input>
         </div>
         
-        {user && <>
+        {user && tempData && <>
         <div className="d-flex justify-content-end">
         <Button variant="outline-success" onClick={() => addList()}>New List</Button>
         </div>

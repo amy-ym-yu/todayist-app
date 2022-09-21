@@ -61,6 +61,7 @@ export function TodoList(props) {
       <div className='app rounded border border-primary flex-grow-1 m-2' style={{maxWidth: '60%',
       minWidth:'20%'}}>
         <div className='container'>
+          <div className="d-flex justify-content-between p-3">
             {/* name of list + toggle name */}
           {toggle ? (
             <h3 className='text-center mb-4' onDoubleClick={() => {
@@ -85,6 +86,7 @@ export function TodoList(props) {
             />
           )}
           <Button variant="outline-danger" onClick={() => props.onDeleteList()}>delete</Button>
+          </div>
               {/* input section for task */}
           <FormTodo addTodo={addTodo} /> 
 
@@ -141,13 +143,13 @@ export function TodoList(props) {
       };
   
       return (
-        <Form onSubmit={handleSubmit}>
-        <Form.Group>
+        <Form onSubmit={handleSubmit} className="d-flex justify-content-between p-3">
+        <Form.Group >
           <Form.Label><b>Add Todo</b></Form.Label>
           <Form.Control type="text" className="input" value={value}
-          onChange={e => setValue(e.target.value)} placeholder="Add new todo" />
+          onChange={e => setValue(e.target.value)} placeholder="add new todo" />
         </Form.Group>
-        <Button variant="primary mb-3" type="submit">Submit</Button>
+        <Button variant="primary mb-3" type="submit">submit</Button>
         </Form>
       );
     }
