@@ -85,7 +85,7 @@ function App() {
       <div className="px-3" >
         <h1 className="text-center p-3">t o d a y i s t</h1>
         { (!user) && <>
-          <span>You're not logged in.</span>
+          <span>You're not logged in. Please enter any name to get started. You will be able to access your lists again using that username.</span>
         </>}
         <div>
           <span>Your name: </span>
